@@ -113,7 +113,7 @@ load_rdf
 if [ ! -z "$ALL_GRAPHS" ] ; then
     # manage all named graphs when load based on $DATASET_URI
     hide_graph "$LAST_GRAPH"
-    show_graph "$NEW_GRAPH"
+    show_graph "$GRAPH_URI"
     delete_graphs "$ALL_GRAPHS" "$NUM_KEEP_GRAPHS"
 fi
 rebuild_textindex
