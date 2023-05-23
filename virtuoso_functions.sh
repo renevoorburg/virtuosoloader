@@ -56,11 +56,12 @@ put_file_and_graph_on_loadlist()
         exit 1
     fi
 
-    echo "ld_dir ('$LOADDIR', '$basename', '$graph');" | $ISQL > /dev/null
+    echo "ld_dir ('.', '$basename', '$graph');" | $ISQL > /dev/null
+    # echo "ld_dir ('$LOADDIR', '$basename', '$graph');" | $ISQL > /dev/null
 
     local res="$(echo "select ll_file from DB.DBA.load_list where ll_error IS NULL;" | $ISQL | tail -n 2 | head -n 1)"
 
-    if [ ! "$res" == "$file" ] ; then
+    if [ ! "$res" == "./$basename" ] ; then ######
         echo "Error: File $file not on loadlist. Exiting."
         exit 1
     fi
@@ -91,16 +92,15 @@ all_graphs_that_hold_entity()
 {
     local entity="$1"
 
-    RETURNVALUE="$(echo "sparql select distinct ?g where { graph ?g { <$entity> a [] . } };" | $ISQL | tail -n +5 | head -n -1)"
+    RETURNVALUE="$(echo "sparql select distinct ?g where { graph ?g { <$entity> a [] . } };" | $ISQL | tail -n +5 | $HEADCMD -n -1)"
 }
 
 all_graphs_for_dataset()
 {
     local dataset_uri="$1"
 
-    RETURNVALUE="$(echo "sparql select distinct ?g where { graph ?g { [] <http://schema.org/mainEntityOfPage>/<http://schema.org/isPartOf> <${dataset_uri}> . }};" | $ISQL | tail -n +5 | head -n -1)"
+    RETURNVALUE="$(echo "sparql select distinct ?g where { graph ?g { [] $SUBJECT_DATASET_RELATION <${dataset_uri}> . }};" | $ISQL | tail -n +5 | $HEADCMD -n -1)"
 }
-
 
 get_last_graph()
 {
@@ -158,7 +158,7 @@ delete_graphs()
     local graphs="$1"
     local num_keep_graphs="-$2"
 
-    for g in `echo "$graphs" | sort | head -n $num_keep_graphs` ; do
+    for g in `echo "$graphs" | sort | $HEADCMD -n $num_keep_graphs` ; do
         msg "Deleting graph $g... (this may take some time)."
         echo "sparql drop silent graph <$g>;" | $ISQL > /dev/null 2>&1
     done
