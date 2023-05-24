@@ -33,7 +33,7 @@ the `isql` command and the Virtuoso `load_dir`.
     
 The relation between an entity `?s` and a dataset `?d` is assumed to be defined by:
 
-	?s $SUBJECT_DATASET_RELATION ?d .
+	?s <http://schema.org/mainEntityOfPage>/<http://schema.org/isPartOf> ?d .
 This may be changed in `src/settings.sh`.
 
 ## requirements
