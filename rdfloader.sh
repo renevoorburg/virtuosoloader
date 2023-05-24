@@ -4,9 +4,9 @@ VERBOSE=true
 SELF="$0"
 SCRIPT_DIR=$(dirname "$SELF")
 
-source $SCRIPT_DIR/settings.sh
-source $SCRIPT_DIR/functions.sh
-source $SCRIPT_DIR/virtuoso_functions.sh
+source $SCRIPT_DIR/src/settings.sh
+source $SCRIPT_DIR/src/functions.sh
+source $SCRIPT_DIR/src/virtuoso_functions.sh
 
 usage()
 {
@@ -35,10 +35,13 @@ $SELF -d http://data.bibliotheken.nl/id/dataset/persons -f NTA.rdf
  $SELF -g http://data.bibliotheken.nl/persons/2023-r01/ -f NTA.rdf  
     Data is loaded in the given named graph. It will be made visible but any
     other named graphs for this dataset remain untouched.
+
+Before you start, make sure that 'src/settings' has the correct paths for
+the isql command and the Virtuoso load_dir.    
     
 The relation between an entity ?s and a dataset ?d is assumed to be defined by:
   ?s $SUBJECT_DATASET_RELATION ?d .
-This may be changed in settings.sh.
+This may be changed in 'src/settings.sh'.
 
 EOF
     exit

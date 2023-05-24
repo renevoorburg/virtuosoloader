@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-# isql, used to comnunicate with virtuoso:
+# isql, used to comnunicate with virtuoso, make sure to append VERBOSE=OFF "":
 ISQL="docker exec --interactive my-virtuoso isql-v VERBOSE=OFF"
 
 # load_dir used by virtuoso ld_dir command:
