@@ -164,6 +164,7 @@ delete_graphs()
 rebuild_textindex()
 {
     msg "Rebuilding text index... (this may take some time)."
-    echo "DB.DBA.RDF_OBJ_FT_RECOVER (); COMMIT WORK;" | $ISQL > /dev/null 2>&1
+    echo "DB.DBA.RDF_OBJ_FT_RECOVER ();" | $ISQL > /dev/null 2>&1
+    echo "COMMIT WORK;" | $ISQL > /dev/null 2>&1
 }
 
