@@ -11,5 +11,3 @@ LOADDIR="/Users/rene/data/virtuoso"
 NUM_KEEP_GRAPHS=2
 
 SUBJECT_DATASET_RELATION="<http://schema.org/mainEntityOfPage>/<http://schema.org/isPartOf>"
-
-

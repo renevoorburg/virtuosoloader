@@ -4,9 +4,13 @@ VERBOSE=true
 SELF="$0"
 SCRIPT_DIR=$(dirname "$SELF")
 
-source $SCRIPT_DIR/src/settings.sh
-source $SCRIPT_DIR/src/functions.sh
-source $SCRIPT_DIR/src/virtuoso_functions.sh
+source "$SCRIPT_DIR/src/settings.sh"
+# allow  use of a separate file for local settings:
+if [ -f "$SCRIPT_DIR/src/settings_local.sh" ] ; then
+    source "$SCRIPT_DIR/src/settings_local.sh"
+fi
+source "$SCRIPT_DIR/src/functions.sh"
+source "$SCRIPT_DIR/src/virtuoso_functions.sh"
 
 usage()
 {
@@ -18,7 +22,8 @@ Loads RDF into Virtuoso.
 OPTIONS:
 -d URI  The dataset that will be replaced by this data.
 -g URI  The named graph data is to be loaded in.
--k int  Number of (hidden) named graphs to keep for this dataset.    
+-k int  Number of (hidden) named graphs to keep for this dataset. 
+-i      Rebuild text index.   
 
 EXAMPLES:
 $SELF -d http://data.bibliotheken.nl/id/dataset/persons -f NTA.rdf
@@ -32,9 +37,10 @@ $SELF -d http://data.bibliotheken.nl/id/dataset/persons -f NTA.rdf
  $SELF -k 3 -d http://data.bibliotheken.nl/id/dataset/persons -f NTA.rdf   
     As previous, but here 3 older hidden named graphs are kept for this dataset.
 
- $SELF -g http://data.bibliotheken.nl/persons/2023-r01/ -f NTA.rdf  
+ $SELF -g http://data.bibliotheken.nl/persons/2023-r01/ -f NTA.rdf -i
     Data is loaded in the given named graph. It will be made visible but any
     other named graphs for this dataset remain untouched.
+    The Virtuoso text index will be rebuild.
 
 Before you start, make sure that 'src/settings' has the correct paths for
 the isql command and the Virtuoso load_dir.    
@@ -54,7 +60,7 @@ read_commandline_parameters()
     DATASET_URI=''
     GRAPH_URI=''
     
-    while getopts "f:d:g:k:h" option ; do
+    while getopts "hf:d:g:k:i" option ; do
         case $option in
             h)  usage
                 ;;
@@ -65,6 +71,8 @@ read_commandline_parameters()
             g)  GRAPH_URI="$OPTARG"
                 ;;
             k)  NUM_KEEP_GRAPHS="$OPTARG"
+                ;;
+            i)  REINDEX="true"
                 ;;
             ?)  usage
                 ;;
@@ -119,7 +127,10 @@ if [ ! -z "$ALL_GRAPHS" ] ; then
     show_graph "$GRAPH_URI"
     delete_graphs "$ALL_GRAPHS" "$NUM_KEEP_GRAPHS"
 fi
-rebuild_textindex
+
+if [ "$REINDEX" = "true" ] ; then
+    rebuild_textindex
+fi
 
 msg "Done."
 
