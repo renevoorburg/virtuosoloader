@@ -24,7 +24,7 @@ This will make NTA.rdf visible as dataset, loaded in a new named graph.
     The previously used named graph is hidden. As a default, two are kept. Older
     named graphs are deleted. 
 
-	./rdfloader -k 3 -d http://data.bibliotheken.nl/id/dataset/persons -f NTA.rdf
+	./rdfloader -k 3 -d http://data.bibliotheken.nl/id/dataset/persons -f NTA.rdf -i
 	   
 As previous, but here 3 older hidden named graphs are kept for this dataset, other graphs for this dataset are deleted. The Virtuoso text index will be rebuild.
 
