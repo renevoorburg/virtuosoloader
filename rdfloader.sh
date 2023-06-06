@@ -24,7 +24,7 @@ OPTIONS:
 -g URI  The named graph data is to be loaded in.
 -k int  Number of (hidden) named graphs to keep for this dataset. 
 -i      Rebuild text index. 
--v      Make visible for user 'nobody'.
+-v      Make newest visible for user 'nobody', hide older graphs for dataset.
 
 EXAMPLES:
 $SELF -d http://data.bibliotheken.nl/id/dataset/persons -f NTA.rdf

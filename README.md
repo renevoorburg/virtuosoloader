@@ -8,7 +8,8 @@ A tool and set of shell based functions to make it easier to load RDF into the V
 	-d URI  The dataset that will be replaced by this data.
 	-g URI  The named graph data is to be loaded in.
 	-k int  Number of (hidden) named graphs to keep for this dataset.
-	-i      Rebuild text index.      
+	-i      Rebuild text index. 
+	-v      Make newest visible for user 'nobody', hide older graphs for dataset.     
 	
 ## examples:
 
@@ -16,7 +17,7 @@ A tool and set of shell based functions to make it easier to load RDF into the V
     
 Data from NTA.rdf is loaded in the given named graph. 
     
-	./rdfloader -d http://data.bibliotheken.nl/id/dataset/persons -f NTA.rdf
+	./rdfloader -d http://data.bibliotheken.nl/id/dataset/persons -f NTA.rdf -v
 
 This will make NTA.rdf visible as dataset, loaded in a new named graph. 
     The URI of the named graph will be based on the existing named graph URI.
@@ -26,7 +27,7 @@ This will make NTA.rdf visible as dataset, loaded in a new named graph.
 
 	./rdfloader -k 3 -d http://data.bibliotheken.nl/id/dataset/persons -f NTA.rdf -i
 	   
-As previous, but here 3 older hidden named graphs are kept for this dataset, other graphs for this dataset are deleted. The Virtuoso text index will be rebuild.
+As previous, but here 3 older hidden named graphs are kept for this dataset, other graphs for this dataset are deleted. The Virtuoso text index will be rebuild. Visibility (rights for user 'nobody') will not be changed.
 
 Before you start, make sure that `src/settings.sh` has the correct paths for
 the `isql` command and the Virtuoso `load_dir`. You can also use a local settings file `src/settings_local.sh` to prevent them from being overwritten. 
