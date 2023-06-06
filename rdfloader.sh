@@ -23,7 +23,8 @@ OPTIONS:
 -d URI  The dataset that will be replaced by this data.
 -g URI  The named graph data is to be loaded in.
 -k int  Number of (hidden) named graphs to keep for this dataset. 
--i      Rebuild text index.   
+-i      Rebuild text index. 
+-v      Make visible for user 'nobody'.
 
 EXAMPLES:
 $SELF -d http://data.bibliotheken.nl/id/dataset/persons -f NTA.rdf
@@ -60,7 +61,7 @@ read_commandline_parameters()
     DATASET_URI=''
     GRAPH_URI=''
     
-    while getopts "hf:d:g:k:i" option ; do
+    while getopts "hf:d:g:k:i:v" option ; do
         case $option in
             h)  usage
                 ;;
@@ -74,6 +75,8 @@ read_commandline_parameters()
                 ;;
             i)  REINDEX="true"
                 ;;
+            i)  SETVISIBILITY="true"
+                ;;    
             ?)  usage
                 ;;
         esac
@@ -121,10 +124,12 @@ put_file_and_graph_on_loadlist "$FILE_IN_LOADDIR" "$GRAPH_URI"
 load_rdf
 
 # clean up:
+
+[ "$SETVISIBILITY" = "true" ] && show_graph "$GRAPH_URI" ;
+
 if [ ! -z "$ALL_GRAPHS" ] ; then
     # manage all named graphs when load based on $DATASET_URI
-    hide_graph "$LAST_GRAPH"
-    show_graph "$GRAPH_URI"
+    [ "$SETVISIBILITY" = "true" ] && hide_graph "$LAST_GRAPH"
     delete_graphs "$ALL_GRAPHS" "$NUM_KEEP_GRAPHS"
 fi
 
@@ -133,5 +138,4 @@ if [ "$REINDEX" = "true" ] ; then
 fi
 
 msg "Done."
-
 
