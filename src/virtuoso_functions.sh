@@ -149,16 +149,23 @@ show_graph()
     msg "Made graph $graph visibile for online users."
 }
 
+erase_graph()
+{
+    local graph="$1"
+    msg "Erasing graph $graph ... (this may take some time)."
+    echo "sparql clear graph <$graph>;" | $ISQL > /dev/null 2>&1
+
+    msg "Erased graph $graph."
+}
+
 delete_graphs()
 {
     local graphs="$1"
     local num_keep_graphs="-$2"
 
     for g in `echo "$graphs" | sort | $HEADCMD -n $num_keep_graphs` ; do
-        msg "Deleting graph $g ... (this may take some time)."
-        echo "sparql drop silent graph <$g>;" | $ISQL > /dev/null 2>&1
+        erase_graph "$g"
     done
-
 }
 
 rebuild_textindex()

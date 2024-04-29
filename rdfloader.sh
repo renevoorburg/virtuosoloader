@@ -21,34 +21,38 @@ Loads RDF into Virtuoso.
 
 OPTIONS:
 -d URI  The dataset that will be replaced by this data.
--g URI  The named graph data is to be loaded in.
 -k int  Number of (hidden) named graphs to keep for this dataset. 
 -i      Rebuild text index. 
 -v      Make newest visible for user 'nobody', hide older graphs for dataset.
+-g URI  The named graph data is to be loaded in.
+-e      Erase the graph before loading data to it.
 
 EXAMPLES:
-$SELF -d http://data.bibliotheken.nl/id/dataset/persons -f NTA.rdf
 
-    This will make NTA.rdf visible as dataset, loaded in a new named graph. 
-    The URI of the named graph will be based on the existing named graph URI.
-    For this, a URI pattern ending in /{year}-r{two digit sequence}/ is expected.
-    Previous named graph is hidden. As a default, $NUM_KEEP_GRAPHS are kept, older
-    named graphs are deleted. 
+ $SELF -g http://data.bibliotheken.nl/persons/2023-r01/ -f NTA.rdf -v -i
+    Data is loaded in the given named graph (-g). It will be made visible (-v) by setting 
+    the permissions for user 'nobody' for this graph to '1'.
+    The Virtuoso text index (-i) will be rebuild.
 
- $SELF -k 3 -d http://data.bibliotheken.nl/id/dataset/persons -f NTA.rdf   
-    As previous, but here 3 older hidden named graphs are kept for this dataset.
-
- $SELF -g http://data.bibliotheken.nl/persons/2023-r01/ -f NTA.rdf -i
-    Data is loaded in the given named graph. It will be made visible but any
-    other named graphs for this dataset remain untouched.
-    The Virtuoso text index will be rebuild.
-
+$SELF -d http://data.bibliotheken.nl/id/dataset/persons -f NTA.rdf -v -i
+    This will make NTA.rdf visible as 'dataset' referenced by the URI
+    http://data.bibliotheken.nl/id/dataset/persons and loaded in a new
+    named graph.
+    A prerequisite is that such a 'dataset' exists. 
+    
+    The relation between an entity ?s and a dataset ?d is assumed to be defined by:
+        ?s $SUBJECT_DATASET_RELATION ?d .
+    This may be changed in 'src/settings.sh'.
+     
+    The URI of the named graph will be based on the existing named graph URIs for this
+    dataset.  A URI pattern for the graph name ending in /{year}-r{two digit sequence}/ is 
+    expected. Previously loaded named graph for this dataset are hidden. 
+    As a default, $NUM_KEEP_GRAPHS are kept, older named graphs are deleted. 
+    Visibility of the loaded graph is set to '1' for user 'nobody'.
+    
 Before you start, make sure that 'src/settings' has the correct paths for
 the isql command and the Virtuoso load_dir.    
     
-The relation between an entity ?s and a dataset ?d is assumed to be defined by:
-  ?s $SUBJECT_DATASET_RELATION ?d .
-This may be changed in 'src/settings.sh'.
 
 EOF
     exit
@@ -75,8 +79,10 @@ read_commandline_parameters()
                 ;;
             i)  REINDEX="true"
                 ;;
-            i)  SETVISIBILITY="true"
-                ;;    
+            v)  SETVISIBILITY="true"
+                ;;
+            e)  ERASE="true"
+                ;;
             ?)  usage
                 ;;
         esac
@@ -119,6 +125,10 @@ fi
 copy_file_to_loaddir "$FILE" && FILE_IN_LOADDIR="$RETURNVALUE"
 clear_loadlist
 put_file_and_graph_on_loadlist "$FILE_IN_LOADDIR" "$GRAPH_URI"
+
+if [ "$ERASE" = "true" ] ; then
+    erase_graph "$GRAPH_URI"
+fi
 
 # load:
 load_rdf
