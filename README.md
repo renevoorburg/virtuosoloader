@@ -41,3 +41,19 @@ This may be changed in `src/settings.sh`.
 ## requirements
 Requires the GNU variant of `head`, so when used on MacOS, make sure the GNU coreutils are installed (for example with `brew install coreutils`. 
 On Linux, the script will abort when it is not being run from inside a `screen` session.
+
+## extras
+
+Some extra handy tools included for free:
+
+`show_graph.sh {URI}`  
+Makes graph {URI} visible for user 'nobody'
+
+`hide_graph.sh {URI}` 
+Makes graph {URI} invisible for user 'nobody'
+
+`erase_graph.sh {URI}`
+Deletes all triples from graph {URI}/
+
+`load_list.sh`
+Displays the contents of the virtuoso loadlist. Handy for debugging RDF that failed to load.
