@@ -6,10 +6,11 @@ A tool and set of shell based functions to make it easier to load RDF into the V
 
 	OPTIONS:
 	-d URI  The dataset that will be replaced by this data.
-	-g URI  The named graph data is to be loaded in.
 	-k int  Number of (hidden) named graphs to keep for this dataset.
 	-i      Rebuild text index. 
-	-v      Make newest visible for user 'nobody', hide older graphs for dataset.     
+	-v      Make newest visible for user 'nobody', hide older graphs for dataset. 
+    -g      URI  The named graph data is to be loaded in.
+    -e      Erase the graph before loading data to it.    
 	
 ## examples:
 

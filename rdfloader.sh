@@ -65,7 +65,7 @@ read_commandline_parameters()
     DATASET_URI=''
     GRAPH_URI=''
     
-    while getopts "hf:d:g:k:i:v" option ; do
+    while getopts "hf:d:g:k:i:ve" option ; do
         case $option in
             h)  usage
                 ;;
