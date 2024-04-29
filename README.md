@@ -46,10 +46,10 @@ On Linux, the script will abort when it is not being run from inside a `screen` 
 
 Some extra handy tools included for free:
 
-`show_graph.sh {URI}`  
+`show_graph.sh {URI}`
 Makes graph {URI} visible for user 'nobody'
 
-`hide_graph.sh {URI}` 
+`hide_graph.sh {URI}`
 Makes graph {URI} invisible for user 'nobody'
 
 `erase_graph.sh {URI}`
